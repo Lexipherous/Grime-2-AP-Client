@@ -41,6 +41,15 @@ public class Grime2ApClientClass : MelonMod
         MethodInfo originalPickableItem = AccessTools.Method(typeof(Gameplay_PickableItem), "Pickup");
         MethodInfo patchPickableItem = AccessTools.Method(typeof(LocationSend), "APItemPickup");
         HarmonyInstance.Patch(originalPickableItem, new HarmonyMethod(patchPickableItem));
+            
+        MethodInfo originalInteractableAbsorbable = AccessTools.Method(typeof(Gameplay_InteractableAbsorbable), "OnInteract");
+        MethodInfo patchInteractableAbsorbable = AccessTools.Method(typeof(LocationSend), "APInteractAbsorb");
+        HarmonyInstance.Patch(originalInteractableAbsorbable, new HarmonyMethod(patchInteractableAbsorbable));
+        
+        MethodInfo originalObjectAbsorbHandler = AccessTools.Method(typeof(Gameplay_ObjectAbsorbHandler), "OnSelfPullStart");
+        MethodInfo patchObjectAbsorbHandler = AccessTools.Method(typeof(LocationSend), "APObjectAbsorb");
+        HarmonyInstance.Patch(originalObjectAbsorbHandler, new HarmonyMethod(patchObjectAbsorbHandler));
+        
         Melon<Grime2ApClientClass>.Logger.Msg($"[{_modNameText}] Initialized! :D");
     }
     
@@ -102,10 +111,13 @@ public class Grime2ApClientClass : MelonMod
                 Melon<Grime2ApClientClass>.Logger.Msg($"Location ID: {loc}");
             }
         }
-        if (GUILayout.Button("GiveTest")) {
-            //Functions.GiveItemById("96f4e840-0412-4231-824f-bba5ecbb0503");
-            //Functions.GiveItemById(Enums.Grime2Dicts.ItemTranslation[11001].gameId);
-            //Functions.APGiveItemToPlayer(11001);
+        if (GUILayout.Button("Flags&Skip")) {
+            SyncHandler.SetGlobalFlagValue("Intro Finished", 1);
+            SyncHandler.SetGlobalFlagValue("GSF_Cinematic_Intro", 1);
+            LevelStreaming_Handler._instance.TeleportPlayerToPosition(new Vector3(1798.55f, 1602.17f, 0.00f));
+        }
+        if (GUILayout.Button("Goal")) {
+            LocationSend.VictoryCon();
         }
         GUILayout.EndHorizontal();
     }
