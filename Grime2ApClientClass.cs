@@ -50,7 +50,26 @@ public class Grime2ApClientClass : MelonMod
         MethodInfo patchObjectAbsorbHandler = AccessTools.Method(typeof(LocationSend), "APObjectAbsorb");
         HarmonyInstance.Patch(originalObjectAbsorbHandler, new HarmonyMethod(patchObjectAbsorbHandler));
         
-        Melon<Grime2ApClientClass>.Logger.Msg($"[{_modNameText}] Initialized! :D");
+        MethodInfo originalAbsorbableCluster = AccessTools.Method(typeof(AbsorbableCluster_Event), "ReleaseContent");
+        MethodInfo patchAbsorbableCluster = AccessTools.Method(typeof(LocationSend), "APMarahBloodroot");
+        HarmonyInstance.Patch(originalAbsorbableCluster, new HarmonyMethod(patchAbsorbableCluster));
+        
+        // NPC Hook
+        MethodInfo originalProfile_NPC = AccessTools.Method(typeof(Profile_NPC), "getInitialConversationID");
+        MethodInfo patchProfile_NPC = AccessTools.Method(typeof(LocationSend), "AP_NPC");
+        HarmonyInstance.Patch(originalProfile_NPC, new HarmonyMethod(patchProfile_NPC));
+        
+        // Checkpoint Hook
+        MethodInfo originalCheckpointHandler = AccessTools.Method(typeof(Gameplay_CheckpointHandler), "OnInteract");
+        MethodInfo patchCheckpointHandler = AccessTools.Method(typeof(LocationSend), "APCheckpoint");
+        HarmonyInstance.Patch(originalCheckpointHandler, new HarmonyMethod(patchCheckpointHandler));
+        
+        // Beacon Hook
+        MethodInfo originalBeaconHandler = AccessTools.Method(typeof(BeaconHandler), "OnInteract");
+        MethodInfo patchBeaconHandler = AccessTools.Method(typeof(LocationSend), "APBeacon");
+        HarmonyInstance.Patch(originalBeaconHandler, new HarmonyMethod(patchBeaconHandler));
+        
+        Melon<Grime2ApClientClass>.Logger.Msg($"[{_modNameText}] Initialized! :D   egg16");
     }
     
     public override void OnUpdate() {

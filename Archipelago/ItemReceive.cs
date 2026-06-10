@@ -37,11 +37,14 @@ public class ItemReceive
         //Melon<Grime2ApClientClass>.Logger.Msg($"gameItemEnum.gameId '{gameItemEnum.gameId}'.");
         
         // Get item data from hashtable
-        Data_Item gameItem = GetItemById(gameItemEnum.gameId);
-        //Melon<Grime2ApClientClass>.Logger.Msg($"gameItem '{gameItem.name} - {gameItem.itemID}'.");
-        
-        //Send Item to player
-        GiveItemById(gameItem, gameItemEnum.quantity);
+        foreach (string gameId in gameItemEnum.gameId)
+        {
+            Data_Item gameItem = GetItemById(gameId);
+            //Melon<Grime2ApClientClass>.Logger.Msg($"gameItem '{gameItem.name} - {gameItem.itemID}'.");
+            
+            //Send Item to player
+            GiveItemById(gameItem, gameItemEnum.quantity);
+        }
     }
     
     public static Data_Item GetItemById(string itemId)
