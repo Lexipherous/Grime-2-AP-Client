@@ -68,6 +68,16 @@ public class Grime2ApClientClass : MelonMod
         MethodInfo originalBeaconHandler = AccessTools.Method(typeof(BeaconHandler), "OnInteract");
         MethodInfo patchBeaconHandler = AccessTools.Method(typeof(LocationSend), "APBeacon");
         HarmonyInstance.Patch(originalBeaconHandler, new HarmonyMethod(patchBeaconHandler));
+            
+        // CutsceneHandler Hook
+        MethodInfo originalGiveItem = AccessTools.Method(typeof(NpcHandleron), "GiveItem");
+        MethodInfo patchGiveItem = AccessTools.Method(typeof(LocationSend), "CutsceneGiveItem");
+        HarmonyInstance.Patch(originalGiveItem, new HarmonyMethod(patchGiveItem));
+            
+        // Trait Hook
+        MethodInfo originalTraitUnlock = AccessTools.Method(typeof(Data_Trait), "Unlock");
+        MethodInfo patchTraitUnlock = AccessTools.Method(typeof(LocationSend), "APTraitUnlock");
+        HarmonyInstance.Patch(originalTraitUnlock, new HarmonyMethod(patchTraitUnlock));
         
         Melon<Grime2ApClientClass>.Logger.Msg($"[{_modNameText}] Initialized! :D   egg16");
     }
@@ -114,7 +124,7 @@ public class Grime2ApClientClass : MelonMod
         if (!isConnected) {
             if (GUILayout.Button("Connect"))  { Session.TryConnect(_inputHost, _inputPort, _inputName, _inputPassword); }
         } else {
-            if (GUILayout.Button("Disconnect"))  { Session.TryConnect(_inputHost, _inputPort, _inputName, _inputPassword); }
+            if (GUILayout.Button("Disconnect"))  { Session.TryDisconnect(); }
         }
         GUILayout.EndHorizontal();
         
@@ -139,5 +149,6 @@ public class Grime2ApClientClass : MelonMod
             LocationSend.VictoryCon();
         }
         GUILayout.EndHorizontal();
+        GUI.DragWindow(new Rect(0, 0, 10000, 20));
     }
 }

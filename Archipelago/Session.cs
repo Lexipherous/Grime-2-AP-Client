@@ -63,9 +63,15 @@ public class Session
         // initial connection (e.g. a copy of the slot data as `loginSuccess.SlotData`)
         var loginSuccess = (LoginSuccessful)result;
         Grime2ApClientClass.isConnected = true;
-        Toasts.AddNew($"Successfully connected to {host} as {loginSuccess.Slot}!");
+        Toasts.AddNew($"Successfully connected to {host}:{port} as {Grime2ApClientClass.session.Players.ActivePlayer}!");
     }
-    
+
+    public static void TryDisconnect()
+    {
+        Grime2ApClientClass.session.Socket.DisconnectAsync();
+        Grime2ApClientClass.isConnected = false;
+    }
+
     public static void OnMessageReceived(LogMessage message)
     {
         Melon<Grime2ApClientClass>.Logger.Msg($"Received message: {message}");

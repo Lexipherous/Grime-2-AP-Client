@@ -27,7 +27,7 @@ public static class Toasts
         _toasts.Insert(0, new ToastMessage(text, duration, fadeDuration));
     }
 
-    public static void Render(float startX = 20f, float startY = 20f, float width = 500f, float lineHeight = 24f, float gap = 1f)
+    public static void Render(float startX = 20f, float startY = 20f, float width = 1000f, float lineHeight = 24f, float gap = 1f)
     {
         // Remove expired toasts first.
         float now = Time.unscaledTime;
@@ -53,7 +53,16 @@ public static class Toasts
             GUI.color = new Color(1f, 1f, 1f, alpha);
 
             float y = startY + i * (lineHeight + gap);
-            GUI.Box(new Rect(startX, y, width, lineHeight), t.Text);
+            Rect rect = new Rect(startX, y, width, lineHeight);
+
+            // Draw dark background
+            GUI.color = new Color(0f, 0f, 0f, 0.6f * alpha);
+            GUI.DrawTexture(rect, Texture2D.whiteTexture);
+
+            // Draw left-aligned text on top
+            GUI.color = new Color(1f, 1f, 1f, alpha);
+            GUIStyle labelStyle = new GUIStyle(GUI.skin.label) {richText = true};
+            GUI.Label(rect, t.Text, labelStyle);
         }
 
         GUI.color = oldColor;

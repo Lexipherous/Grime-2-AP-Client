@@ -39,11 +39,23 @@ public class ItemReceive
         // Get item data from hashtable
         foreach (string gameId in gameItemEnum.gameId)
         {
-            Data_Item gameItem = GetItemById(gameId);
+            
             //Melon<Grime2ApClientClass>.Logger.Msg($"gameItem '{gameItem.name} - {gameItem.itemID}'.");
             
             //Send Item to player
-            GiveItemById(gameItem, gameItemEnum.quantity);
+            switch (gameItemEnum.Type)
+            {
+                case "item":
+                    Data_Item gameItem = GetItemById(gameId);
+                    GiveItemById(gameItem, gameItemEnum.Quantity);
+                    break;
+                case "trait":
+                    GiveTraitById(gameId);
+                    break;
+                default:
+                    Melon<Grime2ApClientClass>.Logger.Msg($"Unknown item type: {gameItemEnum.Type}");
+                    break;
+            }
         }
     }
     
@@ -63,5 +75,19 @@ public class ItemReceive
     public static void GiveItemById(Data_Item item, int quantity = 1){
         PlayerData_Inventory.instance.GiveItem(item, quantity);
         Melon<Grime2ApClientClass>.Logger.Msg($"Gave {quantity}x {item.name} with id {item.itemID}.");
+    }
+
+    public static void GiveTraitById(string traitID)
+    {
+        var traitHashes = Hashtable_Traits.getHashtable.getTable;
+        foreach (var traitHash in traitHashes)
+        {
+            if (traitHash.id == traitID)
+            {
+                PlayerData_Traits.instance.SetTraitRank(traitHash.traitReference, traitHash.traitReference.getTraitRank + 1);
+                Melon<Grime2ApClientClass>.Logger.Msg($"Gave {traitHash.traitReference.name}, rank {traitHash.traitReference.getTraitRank}.");
+                return;
+            }
+        }
     }
 }
