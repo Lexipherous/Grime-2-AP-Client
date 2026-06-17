@@ -1,8 +1,4 @@
 # GRIME II Archipelago Randomiser
-ArchipelagoDredge is a WIP mod for the game DREDGE that integrates Archipelago
-multiworld support, enabling synchronized progression and goal tracking across multiple
-players' games.
-
 This mod is a WIP randomiser mod for GRIME II for Archipelago, allowing for multiworld randomisation.
 
 ### Software:
