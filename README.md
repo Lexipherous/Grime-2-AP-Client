@@ -8,11 +8,11 @@ This mod is a WIP randomiser mod for GRIME II for Archipelago, allowing for mult
 ## Installation
 1. Install Melon ModLoader. Their installation steps are fairly well documented here: https://melonwiki.xyz/#/?id=requirements
     - For Linux, Melon only supports Steam. Make sure you add the launch options otherwise Melon wont load.
-1. Download the the latest release for this mod: [GRIME II AP Releases](https://github.com/Lexipherous/GrimeTwoolbox/releases/latest).
+1. Download the latest `Grime2APClient.dll` and `Archipelago.MultiClient.Net.dll` for this mod: [GRIME II AP Releases](https://github.com/Lexipherous/GrimeTwoolbox/releases/latest).
 1. Once MelonLoader is installed, find your way to the new `mods` folder in your Grime II install.
     - For Windows: `C:\Program Files (x86)\Steam\steamapps\common\GRIME II\mods\`
     - For Linux, by default it will be in: `~/.steam/steam/steamapps/common/GRIME II/mods/`
-1. Place the plugin you've downloaded into this folder.
+1. Place the `Grime2APClient.dll` and `Archipelago.MultiClient.Net.dll` you've downloaded into this folder.
 1. Launch the game. Enjoy!
 
 ## Hosting a Multiworld
