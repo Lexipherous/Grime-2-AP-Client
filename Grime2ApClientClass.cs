@@ -99,11 +99,27 @@ public class Grime2ApClientClass : MelonMod
         MethodInfo patchCharacterKill = AccessTools.Method(typeof(LocationSend), "DataGiveItem");
         HarmonyInstance.Patch(originalCharacterKill, new HarmonyMethod(patchCharacterKill));
         
+        using (Stream bundleStream = MelonAssembly.Assembly.GetManifestResourceStream("Grime2APClient.apBundle"))
+        {
+            
+            Il2CppSystem.IO.Stream Il2CppStream = MapHandler.ConvertToIl2CppStream(bundleStream);
+            APAssetBundle = Il2CppAssetBundleManager.LoadFromStream(Il2CppStream);
+            Il2CppStream.Close();
+        }
+        MethodInfo originalMapManager = AccessTools.Method(typeof(MapHandler_Core), "UpdateMarkers_ProcessMarker");
+        MethodInfo patchMapManager = AccessTools.Method(typeof(MapHandler), "MarkerUpdatePatch");
+        HarmonyInstance.Patch(originalMapManager, new HarmonyMethod(patchMapManager));
         
         MethodInfo originalCriticalFailsafeOverride = AccessTools.Method(typeof(Gameplay_Boss_Base), "RunCriticalQuestItemsFailsafe");
         MethodInfo patchCriticalFailsafeOverride = AccessTools.Method(typeof(LocationSend), "OverrideCriticalQuestItemsFailsafe");
         HarmonyInstance.Patch(originalCriticalFailsafeOverride, new HarmonyMethod(patchCriticalFailsafeOverride));
         
+        /*MethodInfo originalMapUpdate = AccessTools.Method(typeof(MapHandler_Core), "Update");
+        MethodInfo patchMapUpdate = AccessTools.Method(typeof(MapHandler), "CustomMarker");
+        HarmonyInstance.Patch(originalMapUpdate, new HarmonyMethod(patchMapUpdate));*/
+        
+        
+        Melon<Grime2ApClientClass>.Logger.Msg($"[{_modNameText}] Initialized! :D   egg17");
     }
     
     public override void OnUpdate() {

@@ -19,13 +19,11 @@ public class LocationSend
     /// This seems to include: white items, purple items, atrium, fragments. Force Cap items untested.
     /// </summary>
     public static bool APItemPickup(Gameplay_PickableItem __instance, bool instant) {
-        // Replace current item with obsolete hidden item
-        var newItem = ItemReceive.GetItemById("6c96f712-0211-4c1f-a794-cdb781a574dc");
-        if (__instance.pickupType == Gameplay_PickableItem.PickupType.Exp)
-        {
-            __instance.pickupType = Gameplay_PickableItem.PickupType.Item;
-        }
+        // Replace current item with atrium at 0, this makes it invisible as an item
+        var newItem = ItemReceive.GetItemById("e6901134-0303-43f9-86ff-ae499630482a"); // Atrium
+        __instance.pickupType = Gameplay_PickableItem.PickupType.Item;
         __instance.targetItem = newItem;
+        __instance.amount = 0;
 
         SendHandler("ItemPickup", __instance.gameObject.GetComponent<Syncer>().syncerID, __instance.gameObject.scene.name, __instance.gameObject.transform.position);
         return true;
