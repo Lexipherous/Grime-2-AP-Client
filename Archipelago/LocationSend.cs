@@ -227,6 +227,21 @@ public class LocationSend
 		return true;
     }
     
+    // CriticalFailsafeOverride to avoid the game trying to insist we take quest items.
+    /// <summary>
+    /// Hook that's called to make sure the player gets quest items.
+    /// Override ir
+    /// </summary>
+    public static bool OverrideCriticalQuestItemsFailsafe()
+    {
+	    if (Grime2ApClientClass.isConnected)
+	    {
+	        Melon<Grime2ApClientClass>.Logger.Msg("Failsafe has screamed, but it has no mouth and cannot be heard.");
+	        return false;
+	    }
+		return true;
+    }
+
     public static void SendHandler(string source, long syncerID, string areaName, Vector3 pos)
     {
         string sendString = $"{source}|[\"{NameToIDName(areaName)}:{syncerID}\"] = new LocationEnum(0, \"{GetAreaFromSceneName(areaName)}\"), // {pos}";

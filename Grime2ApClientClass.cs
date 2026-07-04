@@ -99,6 +99,11 @@ public class Grime2ApClientClass : MelonMod
         MethodInfo patchCharacterKill = AccessTools.Method(typeof(LocationSend), "DataGiveItem");
         HarmonyInstance.Patch(originalCharacterKill, new HarmonyMethod(patchCharacterKill));
         
+        
+        MethodInfo originalCriticalFailsafeOverride = AccessTools.Method(typeof(Gameplay_Boss_Base), "RunCriticalQuestItemsFailsafe");
+        MethodInfo patchCriticalFailsafeOverride = AccessTools.Method(typeof(LocationSend), "OverrideCriticalQuestItemsFailsafe");
+        HarmonyInstance.Patch(originalCriticalFailsafeOverride, new HarmonyMethod(patchCriticalFailsafeOverride));
+        
     }
     
     public override void OnUpdate() {
