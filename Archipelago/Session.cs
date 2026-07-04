@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.ResourceManagement.Util;
 using UnityEngine.UI;
 using Archipelago.MultiClient.Net;
+using Archipelago.MultiClient.Net.BounceFeatures.DeathLink;
 using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net.Helpers;
 using Archipelago.MultiClient.Net.MessageLog.Messages;
@@ -26,6 +27,10 @@ public class Session
             Grime2ApClientClass.session = ArchipelagoSessionFactory.CreateSession(host, int.Parse(port));
             Grime2ApClientClass.session.MessageLog.OnMessageReceived += OnMessageReceived;
             Grime2ApClientClass.session.Items.ItemReceived += ItemReceive.OnItemReceived;
+            
+            Grime2ApClientClass.deathLinkService = Grime2ApClientClass.session.CreateDeathLinkService();
+            Grime2ApClientClass.deathLinkService.OnDeathLinkReceived += DeathLinkHandler;
+            
             result = Grime2ApClientClass.session.TryConnectAndLogin(
                 "Grime 2",
                 name,
@@ -64,17 +69,33 @@ public class Session
         var loginSuccess = (LoginSuccessful)result;
         Grime2ApClientClass.isConnected = true;
         Toasts.AddNew($"Successfully connected to {host}:{port} as {Grime2ApClientClass.session.Players.ActivePlayer}!");
+        
+        
+        AddOrEditConnectionInfo("ap_host", Grime2ApClientClass.InputHost);
+        AddOrEditConnectionInfo("ap_port", Grime2ApClientClass.InputPort);
+        AddOrEditConnectionInfo("ap_name", Grime2ApClientClass.InputName);
+        AddOrEditConnectionInfo("ap_pass", Grime2ApClientClass.InputPassword);
+        AddOrEditConnectionInfo("ap_seed", Grime2ApClientClass.session.RoomState.Seed);
+    }
     }
 
     public static void TryDisconnect()
     {
         Grime2ApClientClass.session.Socket.DisconnectAsync();
         Grime2ApClientClass.isConnected = false;
+        Grime2ApClientClass.deathLinkService = null;
     }
 
     public static void OnMessageReceived(LogMessage message)
     {
         Melon<Grime2ApClientClass>.Logger.Msg($"Received message: {message}");
         Toasts.AddNew(message.ToString());
+    }
+
+    public static void DeathLinkHandler(DeathLink deathLink)
+    {
+        Melon<Grime2ApClientClass>.Logger.Msg("Received deathLink");
+        Melon<Grime2ApClientClass>.Logger.Msg($"Received {deathLink.Cause} from {deathLink.Source}");
+        CharacterScript_Player_Handler.instance.getHandler_playerController.getCharacter.Kill();
     }
 }

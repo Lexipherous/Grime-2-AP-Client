@@ -29,11 +29,13 @@ public class Grime2ApClientClass : MelonMod
     public static bool isConnected = false;
 
     public static ArchipelagoSession session;
+
+    public static DeathLinkService deathLinkService;
+    //public static DeathLinkService SessionDeathLink;
     
-    private string _inputHost = "localhost";
-    private string _inputPort = "5000";
-    private string _inputName = "egg";
-    private string _inputPassword = "";
+    private static bool _deathLinkToggle = false;
+    private static bool _deathLinkTogglePrevious = true;
+    
     
     public override void OnInitializeMelon() {
         MelonEvents.OnGUI.Subscribe(DrawMenu, 100); // The higher the value, the lower the priority.
