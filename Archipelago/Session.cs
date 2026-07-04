@@ -77,6 +77,17 @@ public class Session
         AddOrEditConnectionInfo("ap_pass", Grime2ApClientClass.InputPassword);
         AddOrEditConnectionInfo("ap_seed", Grime2ApClientClass.session.RoomState.Seed);
     }
+
+    private static void AddOrEditConnectionInfo(string key, string value)
+    {
+        if (SyncHandler.getGeneralData.npcLoadedConversationArticyID.ContainsKey(key))
+        {
+            SyncHandler.getGeneralData.npcLoadedConversationArticyID[key] = value;   // edit existing
+        }
+        else
+        {
+            SyncHandler.getGeneralData.npcLoadedConversationArticyID.Add(key, value); // add new
+        }
     }
 
     public static void TryDisconnect()

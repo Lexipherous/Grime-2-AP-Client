@@ -27,6 +27,11 @@ public class Grime2ApClientClass : MelonMod
     public static Rect _itemWindowRect = new Rect(50, 50, 300, 190);
     public static string _modNameText = "Grime2 AP Client";
     public static bool isConnected = false;
+    
+    public static string InputHost = "localhost";
+    public static string InputPort = "5000";
+    public static string InputName = "egg";
+    public static string InputPassword = "";
 
     public static ArchipelagoSession session;
 
@@ -88,6 +93,10 @@ public class Grime2ApClientClass : MelonMod
     public override void OnUpdate() {
         if (Input.GetKeyDown(KeyCode.F3)) {
             _showMenu = !_showMenu;
+            if (SyncHandler.getGeneralData.npcLoadedConversationArticyID.TryGetValue("ap_host", out string syncHost)) {InputHost = syncHost;}
+            if (SyncHandler.getGeneralData.npcLoadedConversationArticyID.TryGetValue("ap_port", out string syncPort)) {InputPort = syncPort;}
+            if (SyncHandler.getGeneralData.npcLoadedConversationArticyID.TryGetValue("ap_name", out string syncName)) {InputName = syncName;}
+            if (SyncHandler.getGeneralData.npcLoadedConversationArticyID.TryGetValue("ap_pass", out string syncPass)) {InputPassword = syncPass;}
         }
         ItemReceive.Update();
     }
@@ -116,30 +125,31 @@ public class Grime2ApClientClass : MelonMod
     {
         GUILayout.BeginHorizontal();
         GUILayout.Label("Host: ");
-        _inputHost =  GUILayout.TextField(_inputHost);
+        InputHost = GUILayout.TextField(InputHost);
         GUILayout.EndHorizontal();
         
         GUILayout.BeginHorizontal();
         GUILayout.Label("Port: ");
-        _inputPort = GUILayout.TextField(_inputPort, GUILayout.Width(200), GUILayout.Height(20));
+        InputPort = GUILayout.TextField(InputPort, GUILayout.Width(200), GUILayout.Height(20));
         GUILayout.EndHorizontal();
         
         GUILayout.BeginHorizontal();
         GUILayout.Label("Name: ");
-        _inputName = GUILayout.TextField(_inputName, GUILayout.Width(200), GUILayout.Height(20));
+        InputName = GUILayout.TextField(InputName, GUILayout.Width(200), GUILayout.Height(20));
         GUILayout.EndHorizontal();
         
         GUILayout.BeginHorizontal();
         GUILayout.Label("Password: ");
-        _inputPassword = GUILayout.TextField(_inputPassword, GUILayout.Width(200), GUILayout.Height(20));
+        InputPassword = GUILayout.TextField(InputPassword, GUILayout.Width(200), GUILayout.Height(20));
         GUILayout.EndHorizontal();
         
         GUILayout.BeginHorizontal();
         if (!isConnected) {
-            if (GUILayout.Button("Connect"))  { Session.TryConnect(_inputHost, _inputPort, _inputName, _inputPassword); }
+            if (GUILayout.Button("Connect"))  { Session.TryConnect(InputHost, InputPort, InputName, InputPassword); }
         } else {
             if (GUILayout.Button("Disconnect"))  { Session.TryDisconnect(); }
         }
+
         GUILayout.EndHorizontal();
         
         GUILayout.BeginHorizontal();
