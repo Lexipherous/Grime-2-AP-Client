@@ -16,7 +16,6 @@ public class ItemReceive
     {
         var item = helper.DequeueItem();
         InboundQueue.Enqueue(item.ItemId);
-        Grime2ApClientClass.session.Locations.CompleteLocationChecks(1);
     }
 
     public static void Update()
