@@ -94,6 +94,11 @@ public class Grime2ApClientClass : MelonMod
         MethodInfo patchObjective = AccessTools.Method(typeof(LocationSend), "APObjectives");
         HarmonyInstance.Patch(originalObjective, new HarmonyMethod(patchObjective));
             
+        // DataItemGive Hook
+        MethodInfo originalCharacterKill = AccessTools.Method(typeof(Data_Item), "GiveItem");
+        MethodInfo patchCharacterKill = AccessTools.Method(typeof(LocationSend), "DataGiveItem");
+        HarmonyInstance.Patch(originalCharacterKill, new HarmonyMethod(patchCharacterKill));
+        
     }
     
     public override void OnUpdate() {

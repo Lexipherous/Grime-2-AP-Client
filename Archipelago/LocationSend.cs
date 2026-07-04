@@ -214,6 +214,19 @@ public class LocationSend
         return false;
     }
     
+    public static bool DataGiveItem(Data_Item __instance)
+    {
+	    if (Grime2ApClientClass.isConnected)
+	    {
+	        string locationNameID = $"{__instance.name}";
+	        Melon<Grime2ApClientClass>.Logger.Msg($"DataGiveItem | {locationNameID}");
+	        SendLocation(locationNameID);
+	        return false;
+	    }
+	    Melon<Grime2ApClientClass>.Logger.Msg($"DataGiveItem | Vanilla");
+		return true;
+    }
+    
     public static void SendHandler(string source, long syncerID, string areaName, Vector3 pos)
     {
         string sendString = $"{source}|[\"{NameToIDName(areaName)}:{syncerID}\"] = new LocationEnum(0, \"{GetAreaFromSceneName(areaName)}\"), // {pos}";
