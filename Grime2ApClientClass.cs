@@ -39,6 +39,7 @@ public class Grime2ApClientClass : MelonMod
     
     public override void OnInitializeMelon() {
         MelonEvents.OnGUI.Subscribe(DrawMenu, 100); // The higher the value, the lower the priority.
+        MelonEvents.OnGUI.Subscribe(DrawOverlay, 101); // The higher the value, the lower the priority.
             
         MethodInfo originalPickableItem = AccessTools.Method(typeof(Gameplay_PickableItem), "Pickup");
         MethodInfo patchPickableItem = AccessTools.Method(typeof(LocationSend), "APItemPickup");
@@ -90,7 +91,18 @@ public class Grime2ApClientClass : MelonMod
         }
         ItemReceive.Update();
     }
-    
+
+    private void DrawOverlay()
+    {
+        if (!isConnected)
+        {
+            GUIStyle myLabelStyle = new GUIStyle(GUI.skin.label);
+            myLabelStyle.fontSize = 24;
+            myLabelStyle.normal.textColor = Color.red;
+            GUI.Label(new Rect(10, 10, 750, 40), "Not connected to Archipelago", myLabelStyle);
+        }
+    }
+
     private void DrawMenu()
     {
         Toasts.Render();
