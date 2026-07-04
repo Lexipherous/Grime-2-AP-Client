@@ -67,6 +67,13 @@ public class ItemReceive
                 case "trait":
                     GiveTraitById(gameId);
                     break;
+                case "hunt_pigment_1":
+                    CustomHuntPigment(new Vector3(0f, 4f, 0f));
+                    break;
+                case "hunt_pigment_2":
+                    CustomHuntPigment(new Vector3(4f, 2f, 0f));
+                    CustomHuntPigment(new Vector3(-4f, 2f, 0f));
+                    break;
                 default:
                     Melon<Grime2ApClientClass>.Logger.Msg($"Unknown item type: {gameItemEnum.Type}");
                     break;
@@ -106,5 +113,17 @@ public class ItemReceive
                 return;
             }
         }
+    }
+    
+    private static void CustomHuntPigment(Vector3 velVector)
+    {
+        Vector3 playerPos = CharacterScript_Player_Handler.instance.transform.position;
+        playerPos += Vector3.up;
+        GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(GlobalParameters.instance.getCombatParameters.getHuntPointPrefab, playerPos, Quaternion.identity);
+            
+        Gameplay_SimpleFloatingDrop component = gameObject.GetComponent<Gameplay_SimpleFloatingDrop>();
+        component.launchVelocity = velVector;
+        component.Launch(component.getLaunchVelocity);
+        PlayerData_Attributes.instance.ModifyHuntPoints(1, false);
     }
 }
