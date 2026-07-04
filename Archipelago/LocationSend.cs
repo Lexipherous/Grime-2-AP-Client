@@ -231,15 +231,30 @@ public class LocationSend
     private static void SendLocation(string syncerID)
     {
         // Submit location as checked
-        long apId = Grime2Dicts.LocationIds[syncerID].apId;
-        Melon<Grime2ApClientClass>.Logger.Msg($"apId '{apId}'.");
+        long apId;
+        try
+        {
+	        apId = Grime2Dicts.LocationIds[syncerID].apId;
+        }
+        catch
+        {
+	        UI_NotificationHandler.instance.WriteSimpleNotification($"Missing ID. Please report this to the dev.");
+	        Melon<Grime2ApClientClass>.Logger.Msg($"---Missing ID---");
+	        Melon<Grime2ApClientClass>.Logger.Msg($"Failed with ID: {syncerID}");
+	        Melon<Grime2ApClientClass>.Logger.Msg($"Player location: {LevelStreaming_Handler._instance.tempSceneName}");
+	        Melon<Grime2ApClientClass>.Logger.Msg($"----------------");
+	        return;
+        }
+        
+        
+        Melon<Grime2ApClientClass>.Logger.Msg($"Sending AP ID: '{apId}' ({apId-Grime2Dicts.LocationBaseID}).");
         Grime2ApClientClass.session.Locations.CompleteLocationChecks(apId);
         Melon<Grime2ApClientClass>.Logger.Msg($"APItemPickup done.");
 
-        if (syncerID == "498091")
+        /*if (syncerID == "498091")
         {
             VictoryCon();
-        }
+        }*/
     }
 
     public static void VictoryCon()
