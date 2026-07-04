@@ -26,11 +26,27 @@ public class ItemReceive
             while (InboundQueue.Count != 0)
             {
                 var itemId = InboundQueue.Dequeue();
-                APGiveItemToPlayer(itemId);
+                
+                if (!IsItemAlreadyGiven(itemId))
+                {
+                    APGiveItemToPlayer(itemId);
+                }
             }
         }
     }
-    
+
+    public static bool IsItemAlreadyGiven(long apItemID)
+    {
+        int inboundIdValue = SyncHandler.instance._GetGlobalFlagValue($"AP_ITM_{apItemID-Grime2Dicts.LocationBaseID}");
+        if (inboundIdValue == 0)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+
     public static void APGiveItemToPlayer(long apItemID){
         // Get Item from Enums
         Grime2Dicts.ItemEnum gameItemEnum = Grime2Dicts.ItemTranslation[apItemID];
@@ -56,6 +72,8 @@ public class ItemReceive
                     Melon<Grime2ApClientClass>.Logger.Msg($"Unknown item type: {gameItemEnum.Type}");
                     break;
             }
+            
+            SyncHandler.instance._SetGlobalFlagValue($"AP_ITM_{apItemID-Grime2Dicts.LocationBaseID}", 1);
         }
     }
     
