@@ -204,6 +204,16 @@ public class LocationSend
         return true;
     }
 
+    /// <summary>
+    /// Hook that's called at the end of an object absorption.
+    /// Used for processing Discarded Flesh.
+    /// </summary>
+    public static bool APObjectives(Misc_ObjectiveActions __instance)
+    {
+        Melon<Grime2ApClientClass>.Logger.Msg($"OBJECTIVE | Name:{__instance.name} Value:{__instance.value}");
+        return false;
+    }
+    
     public static void SendHandler(string source, long syncerID, string areaName, Vector3 pos)
     {
         string sendString = $"{source}|[\"{NameToIDName(areaName)}:{syncerID}\"] = new LocationEnum(0, \"{GetAreaFromSceneName(areaName)}\"), // {pos}";

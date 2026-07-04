@@ -88,6 +88,12 @@ public class Grime2ApClientClass : MelonMod
         HarmonyInstance.Patch(originalTraitUnlock, new HarmonyMethod(patchTraitUnlock));
         
         Melon<Grime2ApClientClass>.Logger.Msg($"[{_modNameText}] Initialized! :D   egg16");
+            
+        // Objectives Hook
+        MethodInfo originalObjective = AccessTools.Method(typeof(SyncHandler), "CreateObjective");
+        MethodInfo patchObjective = AccessTools.Method(typeof(LocationSend), "APObjectives");
+        HarmonyInstance.Patch(originalObjective, new HarmonyMethod(patchObjective));
+            
     }
     
     public override void OnUpdate() {
